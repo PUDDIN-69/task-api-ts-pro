@@ -188,31 +188,40 @@ router.post('/', (req, res) => {
  */
 
 router.patch('/:id', (req, res) => {
-  const { status } = req.body;
+  const { status, priority, description } = req.body;
 
-  if (!statuses.includes(status)) {
+  if (status && !statuses.includes(status)) {
     return res.status(400).json({
       success: false,
       message: 'Invalid status'
     });
   }
 
-  let progreso = 0;
-
-  if (status === 'in progress') {
-    progreso = 50;
+  if (priority && !priorities.includes(priority)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid priority'
+    });
   }
 
-  if (status === 'done') {
-    progreso = 100;
-  }
+  let progreso;
+
+  if (status === 'pending') progreso = 0;
+  if (status === 'in progress') progreso = 50;
+  if (status === 'done') progreso = 100;
 
   db.run(
-    `UPDATE items 
-     SET status=?, progreso=?, updatedAt=?
-     WHERE id=?`,
+    `UPDATE items SET
+      status = COALESCE(?, status),
+      priority = COALESCE(?, priority),
+      description = COALESCE(?, description),
+      progreso = COALESCE(?, progreso),
+      updatedAt = ?
+     WHERE id = ?`,
     [
       status,
+      priority,
+      description,
       progreso,
       new Date().toISOString(),
       req.params.id
@@ -227,14 +236,12 @@ router.patch('/:id', (req, res) => {
 
       res.json({
         success: true,
-        message: 'Updated',
-        progreso
+        message: 'Updated'
       });
     }
   );
 });
-
-
+   
 /**
  * @swagger
  * /items/{id}:
