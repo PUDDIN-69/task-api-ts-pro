@@ -91,7 +91,7 @@ npm start
 La API estará disponible en:
 
 ```
-http://localhost:3000
+http://localhost:3000/items
 ```
 
 Documentación Swagger:
@@ -134,7 +134,7 @@ El campo `progreso` se actualiza automáticamente según el estado:
 Base URL:
 
 ```
-http://localhost:3000
+http://localhost:3000/items
 ```
 
 ---
@@ -249,18 +249,6 @@ Ejemplo:
 ---
 
 # 4. Actualizar estado de una tarea
-
-## PATCH /items/:id
-
-
-Te dejo únicamente las partes que debes **reemplazar** en tu README. El resto queda igual.
-
-Cambia esta sección:
-
-````md
-
-# 4. Actualizar una tarea parcialmente
-
 ## PATCH /items/:id
 
 Permite actualizar parcialmente una tarea existente.
